@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Runmawi',
             navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
