@@ -1,4 +1,4 @@
-package com.rg.runmawi
+package com.atbuys.runmawi
 import android.content.Intent
 import android.view.WindowManager.LayoutParams
 import android.os.Build
