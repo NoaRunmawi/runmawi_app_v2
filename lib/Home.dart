@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
                   height: 65,
                   padding: EdgeInsets.only(top: 15),
                   decoration: BoxDecoration(
-                      color: Color(0xff000000).withOpacity(0.70),
+                      color: Color(0xff000000).withOpacity(1),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

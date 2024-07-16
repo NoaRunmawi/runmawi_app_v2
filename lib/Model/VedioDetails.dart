@@ -1,7 +1,7 @@
 class MovieModel {
-   bool? status;
-   String? message;
-   List<MovieData>? data;
+  bool? status;
+  String? message;
+  List<MovieData>? data;
 
   MovieModel({ this.status,  this.message, this.data});
 
@@ -18,61 +18,75 @@ class MovieModel {
 
 class MovieData {
   var id;
-   String? title;
-   String? description;
-   String? director;
-   String? producer;
-   var length;
-   String? img;
-   var category;
-   var releaseYear;
-   String? trailerUrl;
-   String? summary;
-   String? genre;
-   var ppvCost;
-   var ppvValidity;
-   String? premierDate;
-   String? premierOn;
-   var user_rating;
-   var average_rating;
-   String? html;
-   var videoId;
-   String? validTill;
-   String? direct_url;
-   var user_save_movie;
-   var type;
-   String? urlDrm;
-   String? videoUrl;
-   var coconut_movie_url;
+  String? title;
+  String? description;
+  String? director;
+  String? producer;
+  var length;
+  String? img;
+  var category;
+  var releaseYear;
+  String? trailerUrl;
+  String? summary;
+  String? genre;
+  var ppvCost;
+  var ppvCost_two;
+  var ppvCost_three;
+  var ppvValidity;
+  String? premierDate;
+  String? premierOn;
+  var user_rating;
+  var average_rating;
+  String? html;
+  var videoId;
+  String? validTill;
+  String? direct_url;
+  var user_save_movie;
+  var type;
+  String? urlDrm;
+  String? videoUrl;
+  var coconut_movie_url;
+  String? bunny_video_id;
+  String? quality;
+  String? super_user;
+  String? auth_token;
+  String? expiration_timestamp;
 
   MovieData({
-     this.id,
-     this.title,
-     this.description,
-     this.director,
-     this.producer,
-     this.length,
-     this.img,
-     this.category,
-     this.releaseYear,
-     this.trailerUrl,
-     this.summary,
+    this.id,
+    this.title,
+    this.description,
+    this.director,
+    this.producer,
+    this.length,
+    this.img,
+    this.category,
+    this.releaseYear,
+    this.trailerUrl,
+    this.summary,
     this.direct_url,
     this.user_rating,
     this.coconut_movie_url,
-     this.genre,
-     this.ppvCost,
-     this.ppvValidity,
-     this.premierDate,
-     this.premierOn,
-     this.html,
-     this.videoId,
-     this.validTill,
+    this.genre,
+    this.ppvCost,
+    this.ppvCost_two,
+    this.ppvCost_three,
+    this.ppvValidity,
+    this.premierDate,
+    this.premierOn,
+    this.html,
+    this.videoId,
+    this.validTill,
     this.user_save_movie,
-     this.type,
-     this.urlDrm,
-     this.videoUrl,
-    this.average_rating
+    this.type,
+    this.urlDrm,
+    this.videoUrl,
+    this.average_rating,
+    this.bunny_video_id,
+    this.quality,
+    this.super_user,
+    this.auth_token,
+    this.expiration_timestamp
   });
 
   factory MovieData.fromJson(Map<String, dynamic> json) {
@@ -92,6 +106,8 @@ class MovieData {
       genre: json['genre'] ?? '',
       user_save_movie: json['user_save_movie']??"0",
       ppvCost: json['ppv_cost']?? 0.0,
+      ppvCost_two: json['ppv_cost_two']?? 0.0,
+      ppvCost_three: json['ppv_cost_three']?? 0.0,
       ppvValidity: json['ppv_validity'] ?? 0,
       premierDate: json['premier_date'],
       premierOn: json['premier_on'] ?? '',
@@ -103,7 +119,12 @@ class MovieData {
       type: json['type'] ?? '',
       urlDrm: json['url_drm'] ?? '',
       videoUrl: json['video_url'] ?? '',
-      coconut_movie_url: json['coconut_movie_url']
+      coconut_movie_url: json['coconut_movie_url'],
+      bunny_video_id:json['bunny_video_id'] ?? '',
+      quality:json['quality'],
+      super_user:json['super_user'],
+      auth_token:json['auth_token'],
+      expiration_timestamp:json['expiration_timestamp'],
     );
   }
 }

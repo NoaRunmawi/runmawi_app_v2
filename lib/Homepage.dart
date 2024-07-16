@@ -226,7 +226,7 @@ class _HomePageState extends State<HomePage> {
 
           height:MediaQuery.of(context).size.height/3.2, // Set the height of the carousel
          // aspectRatio: 16/9, // Adjust the aspect ratio as needed
-          autoPlay: false, // Enable auto-play
+          autoPlay: true, // Enable auto-play
          // autoPlayInterval: Duration(seconds: 3), // Set auto-play interval
           autoPlayCurve: Curves.fastOutSlowIn,
           enlargeCenterPage: true,

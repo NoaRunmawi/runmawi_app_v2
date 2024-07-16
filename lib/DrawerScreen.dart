@@ -26,10 +26,10 @@ class DrawerScreen extends StatelessWidget {
     //     text: "Save List",
     //     Icon: AppImages.icDrawerSavedMooiveIcon
     //     ),
-    DrawerListItem(ValueNotifier(false),
-        text: "Rented Shows & Movies",
-        Icon: AppImages.icDrawerRental
-    ),
+    //DrawerListItem(ValueNotifier(false),
+     //   text: "Rented Shows & Movies",
+      //  Icon: AppImages.icDrawerRental
+    //),
     DrawerListItem(ValueNotifier(false),
         text: "Transaction History",
         Icon: AppImages.icDrawerTransCation),

@@ -15,6 +15,8 @@ import 'package:runmawi/Repositery/Homepage.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:runmawi/Repositery/RazorPay.dart';
 
+import 'BetterPlayer.dart';
+
 class TVShows extends StatefulWidget {
   String? VedioId;
    TVShows({Key? key,required this.VedioId}) : super(key: key);
@@ -154,28 +156,30 @@ class _TVShowsState extends State<TVShows> {
             ),
           ),
          // tvShows!.data![0].rentOption.toString()=="2"?
-      checkValidity(tvShows!.data![0].validTill.toString())?Container():    DefaultButton(
-            text: "Rent (₹${tvShows!.data![0].ppvCost.toString()})",
-            onpress: ()async{
-              print("UUUU"+  await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USERMOBILE));
-              String userId = await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USER_Id);
-              RazorPayPaymentIntegration razorPay = RazorPayPaymentIntegration(callback: callApi);
-              razorPay.amount = num.parse(tvShows!.data![0].ppvCost.toString());
-              razorPay.userName = await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USER_name);
-              razorPay.contactNumber = await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USERMOBILE);
-              razorPay.categoryId = tvShows!.data![0].category.toString();
-              razorPay.videoId = widget.VedioId.toString();
-              razorPay.userId = userId;
-              razorPay.context = context;
-              razorPay.initiliazation();
-            },
-            margin: const EdgeInsets.only(top: 10,left: 16,right: 16),
-            height: 60,
-            borderRadius: 16,
-            color: Colors.blue,
-            bordercolor: AppColor.secondaryBlackColor,
-            style: Styles.style_White(fontWeight: FontWeight.w400, fontsize: 16),
-          ),
+      checkValidity(tvShows!.data![0].validTill.toString())?Container():
+          //DefaultButton(
+           // text: "Rent All Episodes (₹${tvShows!.data![0].ppvCost.toString()})",
+          //  onpress: ()async{
+           //   print("UUUU"+  await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USERMOBILE));
+            //  String userId = await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USER_Id);
+             // RazorPayPaymentIntegration razorPay = RazorPayPaymentIntegration(callback: callApi);
+            //  razorPay.amount = num.parse(tvShows!.data![0].ppvCost.toString());
+            //  razorPay.userName = await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USER_name);
+             // razorPay.contactNumber = await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USERMOBILE);
+             // razorPay.categoryId = tvShows!.data![0].category.toString();
+            //  razorPay.videoId = widget.VedioId.toString();
+            //  razorPay.userId = userId;
+            //  razorPay.quality = "high";
+           //   razorPay.context = context;
+            //  razorPay.initiliazation();
+        //    },
+          //  margin: const EdgeInsets.only(top: 10,left: 16,right: 16),
+          //  height: 60,
+           // borderRadius: 16,
+           // color: Colors.blue,
+           // bordercolor: AppColor.secondaryBlackColor,
+         //   style: Styles.style_White(fontWeight: FontWeight.w400, fontsize: 16),
+         // ),
           Padding(
             padding: EdgeInsets.only(left: 10,right: 10,top: 20,bottom: 10),
             child: Row(
@@ -330,8 +334,11 @@ class _TVShowsState extends State<TVShows> {
                           tvShows!.data![0].episodeDetails![index].episodeValidTill.toString().isEmpty?"Rent(₹${tvShows!.data![0].episodeDetails![index].ppvCost.toString()})":
                           "Watch Now",
                           width: MediaQuery.of(context).size.width/2.3,
-                          // onpress: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerification())),
-                      //    gradient: MethodUtils.gradients(),
+                           onpress: ()=>
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerification())),
+                               Navigator.push(context, MaterialPageRoute(builder: (context)=>DrmPage(tvShows!.data![0].episodeDetails![index].videoImage.toString(), vedioId: tvShows!.data![0].episodeDetails![index].id.toString(),))),
+
+                            //    gradient: MethodUtils.gradients(),
                           margin: const EdgeInsets.only(top: 5,left: 16,right: 16),
                           height: 40,
 

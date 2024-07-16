@@ -38,7 +38,12 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         if(value2.value['status']==true)
           {
           for(int i =0; i<value2.value['data'].length;i++){
-            _transcationList.add(TranscationModel(image: AppImages.icTransactionImage, title: value2.value['data'][i]['title'], subTitle: value2.value['data'][i]['created_at'], trailing: value2.value['data'][i]['amount_paid'] , trailingSubTitle: ""));
+            _transcationList.add(TranscationModel(
+                image: AppImages.icTransactionImage,
+                title: value2.value['data'][i]['title'],
+                subTitle: value2.value['data'][i]['created_at'],
+                trailing: value2.value['data'][i]['amount_paid'] ,
+                trailingSubTitle: ""));
           }
           isLoading = false;
           setState(() {

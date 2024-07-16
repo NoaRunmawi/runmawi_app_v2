@@ -18,10 +18,11 @@ class RazorPayPaymentIntegration{
   VoidCallback callback;
   String? categoryId;
   String? videoId;
+  String? quality;
   String orderId = "00";
   BuildContext? context ;
 
-  RazorPayPaymentIntegration({this.amount,this.contactNumber,this.userName,this.userId , this.context,this.videoId,this.categoryId,required this.callback});
+  RazorPayPaymentIntegration({this.amount,this.contactNumber,this.userName,this.userId , this.context,this.videoId,this.categoryId,required this.callback, this.quality});
 
   Future<void> initiliazation()async{
 
@@ -30,6 +31,7 @@ class RazorPayPaymentIntegration{
     orderIdApi(userId, {
       "type":"generate_order",
       "video_id":videoId,
+      "quality":quality,
       "user_id":userId,
       "category_id":categoryId,
     });
@@ -93,7 +95,7 @@ class RazorPayPaymentIntegration{
       'order_id': orderId,
       // Order Description to be
       // shown in razor pay page
-      'description': 'Description for order',
+      'description': orderId,
       // in seconds
       'prefill': {
         'contact': contactNumber,
@@ -135,13 +137,14 @@ class RazorPayPaymentIntegration{
       "order_id":orderId,
       "amount":amount.toString(),
       "user_id":userId,
+      "quality":quality,
       // "transaction details":response,
       "status":"success",
     }).then((value) {
 
       callback();
 
-      MethodUtils.showToast("success");
+      MethodUtils.showToast("Success !! Khawngaihin a in refresh hun lo nghak rawh...");
 
     }).catchError((e){
       callback();
@@ -158,6 +161,7 @@ class RazorPayPaymentIntegration{
       "order_id":orderId,
       "amount":amount.toString(),
       "user_id":userId,
+      "quality":quality,
       // "transaction details":response,
       "status":"failure",
     }).then((value) {
@@ -180,11 +184,12 @@ callback();
       "amount":amount.toString(),
       "order_id":orderId,
       "user_id":userId,
+      "quality":quality,
       // "transaction details":response,
       "status":"success",
     }).then((value) {
       callback();
-MethodUtils.showToast("success");
+MethodUtils.showToast("Success !! Khawngaihin a in refresh hun lo nghak rawh...");
     }).catchError((e){
       callback();
       MethodUtils.showToast(e.toString());
@@ -205,7 +210,7 @@ class ApiServices {
   // final razorPayKey = "rzp_live_O0kWJvRzk5Bfj8";
   // final razorPaySecret = "vg8nFdI0afV7l3VoASURuI5M";
 
-  Future<dynamic> razorPayApi(String? videoId, String receiptId,String? categoryId) async {
+  Future<dynamic> razorPayApi(String? videoId, String receiptId,String? categoryId, String? quality) async {
     // var auth =
     //     'Basic ' + base64Encode(utf8.encode('$razorPayKey:$razorPaySecret'));
 
@@ -216,6 +221,7 @@ class ApiServices {
      "type":"generate_order",
       "video_id":videoId,
       "user_id":receiptId,
+      "quality":quality,
       "category_id":categoryId,
     });
     request.headers.addAll(headers);

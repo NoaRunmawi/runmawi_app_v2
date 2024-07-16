@@ -1,5 +1,5 @@
 class AppUrl {
-  static var baseUrl = "http://148.113.0.158/mobile_api/route.php" ;
+  static var baseUrl = "https://runmawi.in/mobile_api/route.php" ;
   static var refundPolicy = "https://runmawi.in/page.php?id=paymentpolicies";
   static var termsCondition = "https://runmawi.in/page.php?id=termsofuse";
   static var privacyPolicy = "https://runmawi.in/page.php?id=privacypolicy";

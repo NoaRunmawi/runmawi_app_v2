@@ -18,6 +18,7 @@ import 'package:runmawi/Repositery/RazorPay.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DrmPage extends StatefulWidget {
+
   String? vedioId;
 
   String? image;
@@ -52,10 +53,11 @@ class _DrmPageState extends State<DrmPage> {
   @override
   void initState() {
 
-     betterPlayerConfiguration =
+    betterPlayerConfiguration =
     const BetterPlayerConfiguration(
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,
+      // controlsConfiguration:
       subtitlesConfiguration: BetterPlayerSubtitlesConfiguration(
         // backgroundColor: Colors.green,
         leftPadding: 5,
@@ -67,13 +69,12 @@ class _DrmPageState extends State<DrmPage> {
     );
 
 
-     // _setupDataSource();
+    // _setupDataSource();
 
     _callData();
 
     super.initState();
   }
-
 
 
   Future<void> _callData() async {
@@ -82,7 +83,7 @@ class _DrmPageState extends State<DrmPage> {
 
 
     var userId =
-        await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USER_Id);
+    await AppPrefrence.getString(AppConstants.SHARED_PREFERENCE_USER_Id);
 
     try {
       var response = await HomeRepository().homeApi({
@@ -106,10 +107,69 @@ class _DrmPageState extends State<DrmPage> {
         print("subtitle====$subtitle");
         print("subtitle1====$subtitle1");
 
+        var streamApiHostName="https://video.bunnycdn.com";
+        var libraryId="270162";
+        var videoId=""+movieModel!.data![0].bunny_video_id.toString();
+        var storageZoneId="vz-408b4d55-9c6";
+        var storageDomain="b-cdn.net";
+
+        String video_id=""+movieModel!.data![0].bunny_video_id.toString();
+
+      //  int buffer="${movieModel!.data![0].quality.toString()}" as int;
+
+        String a=movieModel!.data![0].quality.toString();
+
+        int buffer = int.parse(a);
+
+      //  int buffer =100000;
+
+
+        String auth_token=movieModel!.data![0].auth_token.toString();
+        String expiration_timestamp=movieModel!.data![0].expiration_timestamp.toString();
+
+
+        var wvLicenseUri=streamApiHostName+"/WidevineLicense/"+libraryId+"/"+videoId+"?token="+auth_token+"&expires="+expiration_timestamp;
+        //var fpCertificateUri=streamApiHostName+"/FairPlay/"+libraryId+"/certificate";
+
         BetterPlayerDataSource dataSource = BetterPlayerDataSource(
           BetterPlayerDataSourceType.network,
-          // Constants.forBiggerBlazesUrl,
-          movieModel!.data![0].coconut_movie_url.toString(),
+          "https://"+storageZoneId+"."+storageDomain+"/"+videoId+"/playlist.m3u8",
+
+          notificationConfiguration: BetterPlayerNotificationConfiguration(
+            showNotification: true,
+            title: ""+movieModel!.data![0].title.toString(),
+            author: "Director : "+movieModel!.data![0].director.toString(),
+            imageUrl: ""+movieModel!.data![0].img.toString(),
+            activityName: "MainActivity",
+          ),
+
+          drmConfiguration: BetterPlayerDrmConfiguration(
+            drmType: BetterPlayerDrmType.widevine,
+            licenseUrl: wvLicenseUri,
+            headers: {"Referer": "https://runmawi.in" },
+
+          ),
+
+          bufferingConfiguration: BetterPlayerBufferingConfiguration(
+            maxBufferMs: buffer,
+            bufferForPlaybackMs: 2500,
+            bufferForPlaybackAfterRebufferMs: 5000,
+          ),
+
+
+
+        //  placeholder: BetterPlayerController(betterPlayerConfiguration),
+
+          cacheConfiguration: BetterPlayerCacheConfiguration(
+            useCache: true,
+            maxCacheFileSize:  10 * 1024 * 1024,
+            maxCacheSize:  10 * 1024 * 1024,
+            preCacheSize:  2 * 1024 * 1024,
+            key: video_id,
+
+          ),
+
+
           subtitles: BetterPlayerSubtitlesSource.single(
 
             type: BetterPlayerSubtitlesSourceType.file,
@@ -132,11 +192,19 @@ class _DrmPageState extends State<DrmPage> {
           }
         });
 
+
         isLoading = false;
         setState(() {});
 
         _widevineController.setupDataSource(dataSource);
         setState(() {});
+
+
+       // _widevineController.setControlsEnabled(f)
+
+        // BetterPlayerConfiguration controller=BetterPlayerConfiguration( );
+
+
       } else {
         isLoading = false;
         setState(() {});
@@ -180,7 +248,7 @@ class _DrmPageState extends State<DrmPage> {
         body: Container(
           height: height,
           width: width,
-          padding: const EdgeInsets.only(top: 0),
+          padding: const EdgeInsets.only(top: 10),
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(AppImages.commonBackgroundPath),
@@ -188,171 +256,331 @@ class _DrmPageState extends State<DrmPage> {
           child: SingleChildScrollView(
             child: isLoading && movieModel == null
                 ? Padding(
-                    padding: EdgeInsets.only(top: height / 2.3),
-                    child: const Center(child: CircularProgressIndicator()))
+                padding: EdgeInsets.only(top: height / 2.3),
+                child: const Center(child: CircularProgressIndicator()))
                 : Column(
-                    children: [
-                      //
-                      // movieModel!.data![0].type.toString()=="Free"||(movieModel!.data![0].validTill.toString().isNotEmpty&&movieModel!.data![0].validTill!=null)  ?
-                      AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child:  BetterPlayer(controller: _widevineController,
-                        ),
-                        ),
+              children: [
 
-                      checkValidity(movieModel!.data![0].validTill.toString())
-                          ? Container()
-                          : DefaultButton(
-                              text:
-                                  "Rent (₹${movieModel!.data![0].ppvCost.toString()})",
-                              onpress: () async {
+
+                _buildAppBarRow(""+movieModel!.data![0].title.toString()),
+
+               // _buildOverlay(),
+
+                //
+                // movieModel!.data![0].type.toString()=="Free"||(movieModel!.data![0].validTill.toString().isNotEmpty&&movieModel!.data![0].validTill!=null)  ?
+
+
+
+            //     movieModel!.data![0].super_user.toString()=="1"? //super user check na
+            // Stack(
+            //   children: [
+            //     Positioned(
+            //
+            //       child: AspectRatio(aspectRatio: 16 / 9,
+            //              child: BetterPlayer(controller: _widevineController,  ),
+            //       )
+            //     ),
+            //     Positioned(
+            //       top: 10,
+            //       right: 10,
+            //       child: Image.asset(
+            //         'assets/Images/superuser.gif',
+            //         fit: BoxFit.cover,
+            //         width: 40,
+            //         height: 40,
+            //       ),
+            //     ),
+            //
+            //   ],
+            // ) :
+
+
+                movieModel!.data![0].super_user.toString()=="1"? //super user check na
+
+                Container(
+                  child: AspectRatio(aspectRatio: 16 / 9,
+                    child: BetterPlayer(controller: _widevineController,  ),
+
+                  ),) :
+
+
+                checkValidity(movieModel!.data![0].validTill.toString()) ? // lei leh lei loh check na
+                Container( child: AspectRatio(aspectRatio: 16 / 9,
+                    child: BetterPlayer(controller: _widevineController, ),),) :
+                // Image.network("${movieModel!.data![0].img.toString()}"),
+
+                 FadeInImage.assetNetwork(
+                        placeholder: 'assets/Images/placeholder.jpg',
+                        image:"${movieModel!.data![0].img.toString()}"
+                    ),
+
+                checkValidity(movieModel!.data![0].validTill.toString()) ?// lei leh lei loh check na
+                Container( ) :
+                DefaultButton(
+                  text:
+                  "₹ Rent This Movie",
+                  onpress: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+
+                          title: Text("${movieModel!.data![0].title.toString()}"),
+                          content: Text("After payment is successful, you can watch the movie for 3 days.\n\nPlease select movie quality :\n(Inclusive all GST 18%)"),
+                          actions: <Widget>[
+
+
+                            movieModel!.data![0].ppvCost_three.toString()=="0.00"?
+                            Container( ) :
+                            TextButton(
+                              child: Text("Low  quality ₹ ${movieModel!.data![0].ppvCost_three.toString()}"),
+                              onPressed:() async {
+
+                                MethodUtils.showToast("Lo nghak lawk...");
                                 String userId = await AppPrefrence.getString(
                                     AppConstants.SHARED_PREFERENCE_USER_Id);
                                 RazorPayPaymentIntegration razorPay =
-                                    RazorPayPaymentIntegration(
-                                        callback: _callData);
-                                razorPay.amount =
-                                    num.parse(movieModel!.data![0].ppvCost);
+                                RazorPayPaymentIntegration(
+                                    callback: _callData);
+                                // razorPay.amount = 1.00;
+                                razorPay.amount = num.parse(movieModel!.data![0].ppvCost_three);
                                 razorPay.userName =
-                                    await AppPrefrence.getString(AppConstants
-                                        .SHARED_PREFERENCE_USER_name);
+                                await AppPrefrence.getString(AppConstants
+                                    .SHARED_PREFERENCE_USER_name);
                                 razorPay.contactNumber =
-                                    await AppPrefrence.getString(AppConstants
-                                        .SHARED_PREFERENCE_USERMOBILE);
+                                await AppPrefrence.getString(AppConstants
+                                    .SHARED_PREFERENCE_USERMOBILE);
                                 razorPay.categoryId =
                                     movieModel!.data![0].category.toString();
                                 razorPay.videoId = widget.vedioId.toString();
                                 razorPay.userId = userId;
+                                razorPay.quality = "low";
                                 razorPay.context = context;
                                 await razorPay.initiliazation();
+                                Navigator.of(context).pop();
                               },
-                              // onpress: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerification())),
-                              //  gradient: MethodUtils.gradients(),
-                              margin: const EdgeInsets.only(
-                                  top: 10, left: 16, right: 16),
-                              height: 60,
-                              borderRadius: 16,
-                              color: Colors.blue.withOpacity(0.8),
-                              bordercolor: AppColor.secondaryBlackColor,
-                              style: Styles.style_White(
-                                  fontWeight: FontWeight.w400, fontsize: 16),
                             ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, top: 20, bottom: 10),
-                        child: Row(
-                          children: [
-                            ValueListenableBuilder(
-                                valueListenable: saveMovie,
-                                builder: (context, isSave, Widget) {
-                                  return _buildRow(
-                                      isSave.toString() == "0"
-                                          ? "assets/Images/ic_save.png"
-                                          : "assets/Images/ic_savedMovie.png",
-                                      "Save for Later", () async {
-                                    //       MethodUtils.showLoader(context);
-                                    var userId = await AppPrefrence.getString(
-                                        AppConstants.SHARED_PREFERENCE_USER_Id);
-                                    HomeRepository().homeApi({
-                                      "type": "save_video",
-                                      "user_id": userId.toString(),
-                                      "video_id": widget.vedioId,
-                                      "status":
-                                          isSave.toString() == "0" ? "1" : "0"
-                                    }).then((value) {
-                                      if (value.value['status'] == true) {
-                                        isSave.toString() == "0"
-                                            ? saveMovie.value = "1"
-                                            : saveMovie.value = "0";
-                                        //    Navigator.pop(context);
-                                        //   MethodUtils.hideLoader(context);
-                                        //  saveMovie.value = "1";
-                                        MethodUtils.showToast(
-                                            value.value['message']);
-                                      } else {
-                                        saveMovie.value = "0";
-                                        //    MethodUtils.hideLoader(context);
-                                        MethodUtils.showToast(
-                                            value.value['message']);
-                                      }
-                                    }).catchError((e) {
-                                      //   MethodUtils.hideLoader(context);
-                                      MethodUtils.showToast(e.toString());
-                                    });
-                                  });
-                                }),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            movieModel!.data![0].user_rating.toString() == "0"
-                                ? _buildRow(
-                                    "assets/Images/ic_like.png", "Rating", () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ShareRating(
-                                                  vedioId: movieModel!
-                                                      .data![0].id
-                                                      .toString(),
-                                                  callback: _callData,
-                                                )));
-                                  })
-                                : Expanded(child: Container()),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                                child: Text(
-                              movieModel!.data![0].title.toString(),
-                              style: Styles.style_White(
-                                  fontsize: 24, fontWeight: FontWeight.w600),
-                            )),
-                            movieModel!.data![0].average_rating.toString() ==
-                                    "0"
-                                ? Container()
-                                : Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.star,
-                                        color: Color(0xffF6C700),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        movieModel!.data![0].average_rating
-                                            .toString(),
-                                        style: Styles.style_White(
-                                            fontsize: 16,
-                                            fontWeight: FontWeight.w600),
-                                      )
-                                    ],
-                                  ),
-                          ],
-                        ),
-                      ),
 
-                      Padding(
-                          padding:
-                              const EdgeInsets.only(top: 15, left: 10, right: 10),
-                          child: Html(
-                            data: movieModel!.data![0].html.toString(),
-                            style: {},
-                          )),
-                      const SizedBox(height: 100),
+                            movieModel!.data![0].ppvCost_two.toString()=="0.00"?
+                            Container( ) :
+                            TextButton(
+                              child: Text("Medium  quality ₹ ${movieModel!.data![0].ppvCost_two.toString()}"),
+                              onPressed:() async {
+                                MethodUtils.showToast("Lo nghak lawk...");
+                                String userId = await AppPrefrence.getString(
+                                    AppConstants.SHARED_PREFERENCE_USER_Id);
+                                RazorPayPaymentIntegration razorPay =
+                                RazorPayPaymentIntegration(
+                                    callback: _callData);
+                                // razorPay.amount = 1.00;
+                                razorPay.amount = num.parse(movieModel!.data![0].ppvCost_two);
+                                razorPay.userName =
+                                await AppPrefrence.getString(AppConstants
+                                    .SHARED_PREFERENCE_USER_name);
+                                razorPay.contactNumber =
+                                await AppPrefrence.getString(AppConstants
+                                    .SHARED_PREFERENCE_USERMOBILE);
+                                razorPay.categoryId =
+                                    movieModel!.data![0].category.toString();
+                                razorPay.videoId = widget.vedioId.toString();
+                                razorPay.userId = userId;
+                                razorPay.quality = "mid";
+                                razorPay.context = context;
+                                await razorPay.initiliazation();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text("High  quality ₹ ${movieModel!.data![0].ppvCost.toString()}"),
+                              onPressed:() async {
+
+                                MethodUtils.showToast("Lo nghak lawk...");
+                                String userId = await AppPrefrence.getString(
+                                    AppConstants.SHARED_PREFERENCE_USER_Id);
+                                RazorPayPaymentIntegration razorPay =
+                                RazorPayPaymentIntegration(
+                                    callback: _callData);
+                                // razorPay.amount = 1.00;
+                                razorPay.amount = num.parse(movieModel!.data![0].ppvCost);
+                                razorPay.userName =
+                                await AppPrefrence.getString(AppConstants
+                                    .SHARED_PREFERENCE_USER_name);
+                                razorPay.contactNumber =
+                                await AppPrefrence.getString(AppConstants
+                                    .SHARED_PREFERENCE_USERMOBILE);
+                                razorPay.categoryId ="1";
+                                razorPay.videoId = widget.vedioId.toString();
+                                razorPay.userId = userId;
+                                razorPay.quality = "high";
+                                razorPay.context = context;
+                                await razorPay.initiliazation();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+
+                          ],
+                        );
+                      },
+                    );
+
+                  },
+                  // onpress: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerification())),
+                  //  gradient: MethodUtils.gradients(),
+                  margin: const EdgeInsets.only(
+                      top: 10, left: 16, right: 16),
+                  height: 40,
+                  borderRadius: 16,
+                  color: Colors.blue.withOpacity(0.8),
+                  bordercolor: AppColor.secondaryBlackColor,
+                  style: Styles.style_White(
+                      fontWeight: FontWeight.w400, fontsize: 16),
+                ),
+
+                Container(),
+
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 20, bottom: 10),
+                  child: Row(
+                    children: [
+                      ValueListenableBuilder(
+                          valueListenable: saveMovie,
+                          builder: (context, isSave, Widget) {
+                            return _buildRow(
+                                isSave.toString() == "0"
+                                    ? "assets/Images/ic_save.png"
+                                    : "assets/Images/ic_savedMovie.png",
+                                "Save for Later", () async {
+                              //       MethodUtils.showLoader(context);
+                              var userId = await AppPrefrence.getString(
+                                  AppConstants.SHARED_PREFERENCE_USER_Id);
+                              HomeRepository().homeApi({
+                                "type": "save_video",
+                                "user_id": userId.toString(),
+                                "video_id": widget.vedioId,
+                                "status":
+                                isSave.toString() == "0" ? "1" : "0"
+                              }).then((value) {
+                                if (value.value['status'] == true) {
+                                  isSave.toString() == "0"
+                                      ? saveMovie.value = "1"
+                                      : saveMovie.value = "0";
+                                  //    Navigator.pop(context);
+                                  //   MethodUtils.hideLoader(context);
+                                  //  saveMovie.value = "1";
+                                  MethodUtils.showToast(
+                                      value.value['message']);
+                                } else {
+                                  saveMovie.value = "0";
+                                  //    MethodUtils.hideLoader(context);
+                                  MethodUtils.showToast(
+                                      value.value['message']);
+                                }
+                              }).catchError((e) {
+                                //   MethodUtils.hideLoader(context);
+                                MethodUtils.showToast(e.toString());
+                              });
+                            });
+                          }),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      movieModel!.data![0].user_rating.toString() == "0"
+                          ? _buildRow(
+                          "assets/Images/ic_like.png", "Rating", () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShareRating(
+                                  vedioId: movieModel!
+                                      .data![0].id
+                                      .toString(),
+                                  callback: _callData,
+                                )));
+                      })
+                          : Expanded(child: Container()),
                     ],
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                          child: Text(
+                            movieModel!.data![0].title.toString(),
+                            style: Styles.style_White(
+                                fontsize: 24, fontWeight: FontWeight.w600),
+                          )),
+                      movieModel!.data![0].average_rating.toString() ==
+                          "0"
+                          ? Container()
+                          : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Color(0xffF6C700),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            movieModel!.data![0].average_rating
+                                .toString(),
+                            style: Styles.style_White(
+                                fontsize: 16,
+                                fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                    padding:
+                    const EdgeInsets.only(top: 15, left: 10, right: 10),
+                    child: Html(
+                      data: movieModel!.data![0].html.toString(),
+                      style: {},
+                    )),
+                const SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+
+
+  Widget _buildAppBarRow( String title) {
+    return Row(
+
+      children: [
+        GestureDetector(
+          onTap: ()
+          {
+            Navigator.pop(context);
+          },
+
+          child: Image.asset(
+            AppImages.barBackImage,
+            scale: 2,
+
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+
+      ],
+    );
+  }
+
 
   Widget _buildRow(String image, String text, void Function() ontap) {
     return Expanded(
@@ -396,9 +624,9 @@ class _DrmPageState extends State<DrmPage> {
       builder: (context, snapshot) {
         return _showPlaceholder
             ? Image.network(
-                widget.image.toString(),
-                fit: BoxFit.fill,
-              )
+          widget.image.toString(),
+          fit: BoxFit.fill,
+        )
             : const SizedBox();
       },
     );
@@ -422,9 +650,9 @@ class _DrmPageState extends State<DrmPage> {
             aspectRatio: 16 / 9,
             child: showPlaceholder
                 ? Image.network(
-                    widget.image.toString(),
-                    fit: BoxFit.fill,
-                  )
+              widget.image.toString(),
+              fit: BoxFit.fill,
+            )
                 : Container(),
           ),
         );
@@ -440,11 +668,11 @@ class _DrmPageState extends State<DrmPage> {
 
         return showOverlay
             ? const Center(
-                child: Text(
-                  "Rishi Sir",
-                  style: TextStyle(color: Colors.red),
-                ),
-              )
+          child: Text(
+            "Rishi Sir",
+            style: TextStyle(color: Colors.red),
+          ),
+        )
             : Container();
       },
     );
@@ -467,13 +695,13 @@ class Constants {
       "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
   static const Map<String, String> exampleResolutionsUrls = {
     "LOW":
-        "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
+    "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
     "MEDIUM":
-        "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+    "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
     "LARGE":
-        "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
+    "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
     "EXTRA_LARGE":
-        "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1920_18MG.mp4"
+    "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1920_18MG.mp4"
   };
   static const String phantomVideoUrl =
       "http://sample.vodobox.com/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8";
@@ -515,5 +743,3 @@ class Utils {
     return "${directory.path}/$fileName";
   }
 }
-
-

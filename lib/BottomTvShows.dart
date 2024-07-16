@@ -40,31 +40,44 @@ class _BottomTvShowsState extends State<BottomTvShows> {
             _buildAppBarRow(),
             widget.datalist==null   ?Padding(
                 padding: EdgeInsets.only(top: height/2.5),
-                child: MethodUtils.adaptiveLoader()):    Expanded(
-              child: SingleChildScrollView(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 16/12,
-                    crossAxisCount: 2, // Number of columns in the grid
-                    crossAxisSpacing: 16.0, // Spacing between columns
-                    mainAxisSpacing: 16.0, // Spacing between rows
-                  ),
-                  itemCount:widget.datalist!.length,
+                child: MethodUtils.adaptiveLoader()):
 
-                  //_datalist.length, // Number of items in the grid
-                  itemBuilder: (context, index) {
-                    return MovieAdapter(
-                      width: MediaQuery.of(context).size.width,
-                      image: widget.datalist![index].img.toString(),
-                      id: widget.datalist![index].id.toString(),
-                      url: "tvshow"
-                    );
-                  },
-                ),
-              ),
-            ),
+
+
+              Text(
+                "\n\nComing soon..",style: Styles.style_White(fontsize: 18,fontWeight: FontWeight.w600),),
+
+            Text(
+              "\n\nStream it on runmawi.in website ",style: Styles.style_White(fontsize: 18,fontWeight: FontWeight.w600),),
+
+
+            // Expanded(
+            //   child: SingleChildScrollView(
+            //     child: GridView.builder(
+            //       shrinkWrap: true,
+            //       physics: NeverScrollableScrollPhysics(),
+            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //         childAspectRatio: 16/12,
+            //         crossAxisCount: 2, // Number of columns in the grid
+            //         crossAxisSpacing: 16.0, // Spacing between columns
+            //         mainAxisSpacing: 16.0, // Spacing between rows
+            //       ),
+            //       itemCount:widget.datalist!.length,
+            //
+            //       //_datalist.length, // Number of items in the grid
+            //       itemBuilder: (context, index) {
+            //         return MovieAdapter(
+            //           width: MediaQuery.of(context).size.width,
+            //           image: widget.datalist![index].img.toString(),
+            //           id: widget.datalist![index].id.toString(),
+            //           url: "tvshow"
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
+            //
+
             SizedBox(
               height: 60,
             )
@@ -79,7 +92,7 @@ class _BottomTvShowsState extends State<BottomTvShows> {
     return Row(
       children: [
         Text(
-              "Tv Shows",style: Styles.style_White(fontsize: 18,fontWeight: FontWeight.w600),)
+              "Tv Shows ",style: Styles.style_White(fontsize: 18,fontWeight: FontWeight.w600),)
       ],
     );
   }

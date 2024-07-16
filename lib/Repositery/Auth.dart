@@ -18,6 +18,7 @@ class AuthRepository {
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.baseUrl, data);
       if(response['status']==true)
       {
+        MethodUtils.showToast("OTP kan lo thawn che, i message check rawh...");
         Navigator.pop(context);
        // MethodUtils.hideLoader(context);
   Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerification(

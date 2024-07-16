@@ -369,6 +369,7 @@ class _OtpVerificationState extends State<OtpVerification> {
       "password":otp.toString(),
       "type":"verifyOtp",
     };
+
       MethodUtils.showLoader(context);
       AuthRepository().verifyOtpApi(_verifyParams).then((value) {
         if(value.value['status'])
@@ -380,6 +381,7 @@ class _OtpVerificationState extends State<OtpVerification> {
             AppPrefrence.putString(AppConstants.SHARED_PREFERENCE_USERMOBILE,widget.userId.toString() );
             Navigator.pop(context);
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Home()), (route) => false);
+            MethodUtils.showToast(value.value['data']['username'].toString()+" kan lo lawm a che..");
           }
         else{
           MethodUtils.hideLoader(context);

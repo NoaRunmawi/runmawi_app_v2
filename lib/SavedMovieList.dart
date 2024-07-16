@@ -103,18 +103,22 @@ class _SavedMoiveListState extends State<SavedMoiveList> {
               ],
             ),
             SizedBox(height: 20,
-            ),
-            isLoading == true? Center(child: MethodUtils.adaptiveLoader(),):
-            movieModel?.data==null?Container():
-            Expanded(
-              child: ListView.builder(
-                  itemCount: movieModel!.data!.length,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context,index){
-                return    _buildMovieCard(movieModel!.data![index]);
-              }),
-            )
+             ),
+
+            Text(
+              "\n\nComing soon..",style: Styles.style_White(fontsize: 18,fontWeight: FontWeight.w600),),
+
+            // isLoading == true? Center(child: MethodUtils.adaptiveLoader(),):
+            // movieModel?.data==null?Container():
+            // Expanded(
+            //   child: ListView.builder(
+            //       itemCount: movieModel!.data!.length,
+            //       shrinkWrap: true,
+            //       padding: EdgeInsets.zero,
+            //       itemBuilder: (context,index){
+            //     return    _buildMovieCard(movieModel!.data![index]);
+            //   }),
+            // )
 
           ],
         ),
@@ -190,7 +194,7 @@ class _SavedMoiveListState extends State<SavedMoiveList> {
                  //   MethodUtils.showToast(value.value['message']);
                   }
                   else{
-MethodUtils.hideLoader(context);
+                    MethodUtils.hideLoader(context);
                     MethodUtils.showToast(value.value['message']);
                   }
                 }).catchError((e){

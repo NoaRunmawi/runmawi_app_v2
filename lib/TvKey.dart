@@ -52,19 +52,19 @@ class _TvKeyBuilderState extends State<TvKeyBuilder> {
 
                 Align(
                     alignment: Alignment.center,
-                    child: Text("TV Key",style: Styles.style_White(fontsize: 16,fontWeight: FontWeight.w600),)),
+                    child: Text("Coming Soon.. ",style: Styles.style_White(fontsize: 20,fontWeight: FontWeight.w600),)),
                 SizedBox(
                   height: 20,
                 ),
-                Text("Runmawi TV App (Demo) is available for download at runmawi.comKan website runmawi.com ah Runmawi TV App (Demo) download theih in a awm e.",style: Styles.style_White(
+                Text("Runmawi TV App is available for download at runmawi.com. \n\nKan website runmawi.com ah Runmawi TV App download theih in a awm e.",style: Styles.style_White(
                   fontsize: 12,fontWeight: FontWeight.w400
                 ),),
                 SizedBox(
                   height: 10,
-                ),
-               Text("Steps to watch in Android TV",style: Styles.style_White(fontsize: 16,fontWeight: FontWeight.w600),),
-                Html( data: decodedString,
                 )
+              // Text("Steps to watch in Android TV",style: Styles.style_White(fontsize: 16,fontWeight: FontWeight.w600),),
+                //Html( data: decodedString,
+
               ],
             ),
           ),
